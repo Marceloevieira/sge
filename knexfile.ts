@@ -3,18 +3,33 @@ import type { Knex } from 'knex';
 // Update with your config settings.
 
 const config: { [key: string]: Knex.Config } = {
+  test: {
+    client: 'sqlite3',
+    connection: {
+      filename: './test.sqlite3',
+    },
+    migrations: {
+      directory: './database/migrations',
+      tableName: 'knex_migrations',
+      extension: 'ts',
+    },
+    seeds: {
+      directory: './database/seeds',
+      extension: 'ts',
+    },
+  },
   development: {
     client: 'sqlite3',
     connection: {
       filename: './dev.sqlite3',
     },
     migrations: {
-      directory: 'database/migrations',
+      directory: './database/migrations',
       tableName: 'knex_migrations',
       extension: 'ts',
     },
     seeds: {
-      directory: 'database/seeds',
+      directory: './database/seeds',
       extension: 'ts',
     },
   },
@@ -31,12 +46,12 @@ const config: { [key: string]: Knex.Config } = {
       max: 10,
     },
     migrations: {
-      directory: 'database/migrations',
+      directory: './database/migrations',
       tableName: 'knex_migrations',
       extension: 'ts',
     },
     seeds: {
-      directory: 'database/seeds',
+      directory: './database/seeds',
       extension: 'ts',
     },
   },
@@ -53,13 +68,15 @@ const config: { [key: string]: Knex.Config } = {
       max: 10,
     },
     migrations: {
-      directory: 'database/migrations',
+      directory: './database/migrations',
       tableName: 'knex_migrations',
+      extension: 'ts',
     },
     seeds: {
-      directory: 'database/seeds',
+      directory: './database/seeds',
+      extension: 'ts',
     },
   },
 };
 
-module.exports = config;
+export default config;
