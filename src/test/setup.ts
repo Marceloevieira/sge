@@ -10,12 +10,12 @@ declare global {
 }
 
 beforeAll(async () => {
+  process.env.JWT_KEY = 'asdasdasd';
   Model.knex(db);
 });
 
 beforeEach(async () => {
-  //@ts-ignore
-  await fs.remove(config[`${process.env.NODE_ENV}`].connection.filename);
+  await db.migrate.rollback();
   await db.migrate.latest();
   await db.seed.run();
 });
