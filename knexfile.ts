@@ -5,9 +5,8 @@ import type { Knex } from 'knex';
 const config: { [key: string]: Knex.Config } = {
   test: {
     client: 'sqlite3',
-    connection: {
-      filename: './test.sqlite3',
-    },
+    connection: ':memory:',
+    useNullAsDefault: true,
     migrations: {
       directory: './database/migrations',
       tableName: 'knex_migrations',
@@ -23,6 +22,7 @@ const config: { [key: string]: Knex.Config } = {
     connection: {
       filename: './dev.sqlite3',
     },
+    useNullAsDefault: true,
     migrations: {
       directory: './database/migrations',
       tableName: 'knex_migrations',

@@ -1,4 +1,4 @@
-import { Model } from 'objection';
+import { Model, Transaction, transaction } from 'objection';
 import request from 'supertest';
 import config from '../../knexfile';
 import { app } from '../app';
@@ -7,23 +7,26 @@ import fs from 'fs-extra';
 
 declare global {
   var signin: () => Promise<string[]>;
+  var txn: Transaction;
 }
 
 beforeAll(async () => {
   process.env.JWT_KEY = 'asdasdasd';
-  Model.knex(db);
-});
-
-beforeEach(async () => {
-  await db.migrate.rollback();
   await db.migrate.latest();
   await db.seed.run();
 });
 
+beforeEach(async () => {
+  global.txn = await transaction.start(db);
+  Model.knex(global.txn);
+});
+
+afterEach(async () => {
+  await global.txn.rollback();
+});
+
 afterAll(async () => {
   await db.destroy();
-  //@ts-ignore
-  await fs.remove(config[`${process.env.NODE_ENV}`].connection.filename);
 });
 
 global.signin = async () => {
@@ -31,7 +34,7 @@ global.signin = async () => {
   const password = 'password';
 
   const response = await request(app)
-    .post('/api/users/signup')
+    .put('/v1/signup')
     .send({
       email,
       password,

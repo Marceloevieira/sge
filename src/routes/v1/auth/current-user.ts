@@ -1,13 +1,13 @@
 import express, { Request, Response, NextFunction } from 'express';
-import { User } from '../../../model/user.model';
+import { currentUser } from '../../../middlewares/current-user';
 
 const router = express.Router();
 
 router.get(
   '/current-user',
+  currentUser,
   async (request: Request, response: Response, next: NextFunction) => {
-    const users = await User.query();
-    response.status(200).send(users);
+    response.send({ currentUser: request.currentUser || null });
   }
 );
 
